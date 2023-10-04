@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Book</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        input[type="text"] {
+            width: 200px;
+            padding: 5px;
+            margin-bottom: 10px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+
+        input[type="submit"],
+        button {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover,
+        button:hover {
+            background-color: #45a049;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        li {
+            margin-bottom: 10px;
+            display: inline-block;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        .book-details {
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        .book-actions {
+            text-align: right;
+        }
+
+        .add-book-form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+
+        .add-book-form label {
+            display: block;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .add-book-form input[type="text"] {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        .add-book-form input[type="submit"] {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .add-book-form input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Add Book</h1>
+    <div class="add-book-form">
+    <form action="/submit" method="POST">
+        <label for="name">Book Name:</label>
+        <input type="text" id="name" name="name" required><br>
+
+        <label for="author">Author Name:</label>
+        <input type="text" id="author" name="author" required><br>
+
+        <label for="cost">Cost:</label>
+        <input type="text" id="cost" name="cost" required><br>
+
+        <input type="submit" value="Submit">
+    </form>
+    </div>
+    <h2>Book List:</h2>
+    <ul>
+        {{ range .Books }}
+        <li>
+            <form action="/modify" method="post" onsubmit="return confirm('Are you sure you want to modify this book?')">
+                <input type="hidden" name="id" value="{{.ID.Hex}}">
+                <div class="book-details">
+                    <label for="name{{.ID.Hex}}">Book Name:</label>
+                    <input type="text" id="name{{.ID.Hex}}" name="name" value="{{.Name}}">
+                    <label for="author{{.ID.Hex}}">Author Name:</label>
+                    <input type="text" id="author{{.ID.Hex}}" name="author" value="{{.Author}}">
+                    <label for="cost{{.ID.Hex}}">Cost:</label>
+                    <input type="text" id="cost{{.ID.Hex}}" name="cost" value="{{.Cost}}">
+                </div>
+                <div class="book-actions">
+                    <button type="submit">Modify</button>
+                </div>
+            </form>
+            <form action="/delete" method="post" onsubmit="return confirm('Are you sure you want to delete this book?')">
+                <input type="hidden" name="id" value="{{.ID.Hex}}">
+                <div class="book-actions">
+                    <button type="submit">Delete</button>
+                </div>
+            </form>
+        </li>
+        {{ end }}
+    </ul>
+
+</body>
+</html>
